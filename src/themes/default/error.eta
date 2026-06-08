@@ -1,0 +1,7 @@
+<% layout("./layout") %>
+
+<h2><%= it.status %> <%= it.message %></h2>
+
+<p>抱歉，页面出现了问题。</p>
+
+<p><a href="/">返回首页</a></p>

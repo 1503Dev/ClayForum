@@ -1,0 +1,115 @@
+<% layout("./layout") %>
+
+<h2>发帖</h2>
+<% if (it.error) { %>
+<p class="form-error"><%= it.error %></p>
+<% } %>
+
+<form class="post-form" id="create-post-form" method="post" action="/create">
+    <div class="form-row">
+        <label for="title">标题</label>
+        <input type="text" id="title" name="title" maxlength="128" required value="<%= it.form?.title || '' %>">
+    </div>
+    <div class="form-row">
+        <label for="section_id">板块</label>
+        <select id="section_id" name="section_id" required>
+            <option value="">请选择板块</option>
+            <% if (it.sections) { it.sections.forEach(function(section) { %>
+            <option value="<%= section.id %>"<% if (String(it.form?.section_id) === String(section.id)) { %> selected<% } %>><%= section.name %></option>
+            <% }) } %>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="tags">标签</label>
+        <input type="text" id="tags" name="tags" placeholder="多个标签用逗号分隔" value="<%= it.form?.tags || '' %>">
+    </div>
+    <div class="form-row">
+        <label for="content">内容（Markdown）</label>
+        <textarea id="content" name="content" rows="16" required><%= it.form?.content || '' %></textarea>
+        <small class="form-hint">支持 Markdown 语法。图片请通过下方上传后插入，不支持外部图片链接。</small>
+    </div>
+    <div class="form-row">
+        <label>图片上传</label>
+        <input type="file" id="image-upload" accept="image/jpeg,image/png,image/gif,image/webp">
+        <small class="form-hint">最大 <%= it.upload.max_image_size %> KB，上传后自动插入 Markdown 图片语法</small>
+        <p id="upload-status" class="form-hint"></p>
+    </div>
+    <div class="editor-actions">
+        <button type="button" id="preview-btn">预览</button>
+        <button type="submit">发布</button>
+        <a href="/">取消</a>
+    </div>
+</form>
+
+<div id="preview-panel" class="preview-panel" hidden>
+    <h3>预览</h3>
+    <div id="preview-content" class="markdown-body"></div>
+</div>
+
+<% block("scripts") %>
+<script>
+(function () {
+    const previewBtn = document.getElementById('preview-btn');
+    const previewPanel = document.getElementById('preview-panel');
+    const previewContent = document.getElementById('preview-content');
+    const contentField = document.getElementById('content');
+    const uploadInput = document.getElementById('image-upload');
+    const uploadStatus = document.getElementById('upload-status');
+
+    previewBtn.addEventListener('click', async function () {
+        const content = contentField.value;
+        previewBtn.disabled = true;
+        try {
+            const res = await fetch('/api/posts/preview', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ content }),
+            });
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+                alert(data.message || '预览失败');
+                return;
+            }
+            previewContent.innerHTML = data.html;
+            previewPanel.hidden = false;
+        } catch {
+            alert('预览请求失败');
+        } finally {
+            previewBtn.disabled = false;
+        }
+    });
+
+    uploadInput.addEventListener('change', async function () {
+        const file = uploadInput.files && uploadInput.files[0];
+        if (!file) return;
+        uploadStatus.textContent = '上传中...';
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const res = await fetch('/api/upload/image', {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: formData,
+            });
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+                uploadStatus.textContent = data.message || '上传失败';
+                return;
+            }
+            const markdown = '![' + (file.name || 'image') + '](' + data.url + ')';
+            const start = contentField.selectionStart;
+            const end = contentField.selectionEnd;
+            const before = contentField.value.slice(0, start);
+            const after = contentField.value.slice(end);
+            contentField.value = before + markdown + after;
+            contentField.focus();
+            contentField.selectionStart = contentField.selectionEnd = start + markdown.length;
+            uploadStatus.textContent = '上传成功';
+            uploadInput.value = '';
+        } catch {
+            uploadStatus.textContent = '上传请求失败';
+        }
+    });
+})();
+</script>

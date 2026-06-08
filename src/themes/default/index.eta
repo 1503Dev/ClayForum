@@ -1,0 +1,47 @@
+<% layout("./layout") %>
+
+<div class="main-content-layout">
+    <div class="main-column">
+        <div class="forum-title-section">
+            <h3>热门板块</h3>
+            <div class="forum-link-list">
+                <% if (it.sections && it.sections.length > 0) { %>
+                <% it.sections.forEach(function(section) { %>
+                <a href="/section/<%= section.id %>"><%= section.name %></a>
+                <% }) %>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="forum-title-section" style="margin-top: 20px;">
+            <h3>热门标签</h3>
+            <div class="forum-link-list">
+                <% if (it.tags && it.tags.length > 0) { %>
+                <% it.tags.forEach(function(tag) { %>
+                <a href="/tag/<%= encodeURIComponent(tag.name) %>"><%= tag.name %></a>
+                <% }) %>
+                <% } %>
+            </div>
+        </div>
+
+        <div class="post-list-section" style="margin-top: 20px;">
+            <h3>最新发帖</h3>
+            <div class="post-text-list">
+                <% if (it.posts && it.posts.length > 0) { %>
+                <% it.posts.forEach(function(post) { %>
+                <div class="post-list-item">
+                    <a href="/post/<%= post.id %>"><%= post.title %></a>
+                    <small>浏览 <%= post.views %> · <%= post.author_name %></small>
+                </div>
+                <% }) %>
+                <% } else { %>
+                <p>暂无帖子</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-column">
+        <a href="/create">发帖</a>
+    </div>
+</div>

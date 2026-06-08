@@ -1,0 +1,15 @@
+<% layout("./layout") %>
+
+<h2>所有标签</h2>
+<div class="tag-cloud">
+    <% if (it.tags && it.tags.length > 0) { %>
+    <% it.tags.forEach(function(tag) { %>
+    <span class="tag-item">
+        <a href="/tag/<%= encodeURIComponent(tag.name) %>"># <%= tag.name %></a>
+        <small style="color: #666666;">(<%= tag.count %> 帖 · 浏览 <%= tag.views %>)</small>
+    </span>
+    <% }) %>
+    <% } else { %>
+    <p>暂无标签</p>
+    <% } %>
+</div>

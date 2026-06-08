@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><% if (it.page_title) { %><%= it.page_title %> - <% } %><%= it.forum_name %></title>
+    <link rel="stylesheet" href="<%= it.request_root %>statics/theme/style.css">
+    <%~ block("head") %>
+</head>
+<body>
+<div class="container">
+    <%~ include("./partials/header") %>
+    <%~ it.body %>
+    <%~ include("./partials/footer") %>
+</div>
+<%~ block("scripts") %>
+</body>
+</html>

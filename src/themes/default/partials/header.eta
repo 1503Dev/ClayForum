@@ -1,0 +1,19 @@
+<div class="header-nav">
+    <h1><a href="/"><%= it.forum_name %></a></h1>
+    <div class="nav-links">
+        <a href="/" class="first<% if (it.active_nav === 'home') { %> active<% } %>">首页</a>
+        <a href="/sections"<% if (it.active_nav === 'sections') { %> class="active"<% } %>>板块</a>
+        <a href="/tags"<% if (it.active_nav === 'tags') { %> class="active"<% } %>>标签</a>
+    </div>
+    <div class="auth-links">
+        <% if (it.current_user) { %>
+        <span class="auth-user"><%= it.current_user.display_name %></span>
+        <form action="/logout" method="post" class="inline-form">
+            <button type="submit" class="link-button">退出</button>
+        </form>
+        <% } else { %>
+        <a href="/login" class="first<% if (it.active_nav === 'login') { %> active<% } %>">登录</a>
+        <a href="/register"<% if (it.active_nav === 'register') { %> class="active"<% } %>>注册</a>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<% layout("./layout") %>
+
+<h2># <%= it.tag.name %></h2>
+<p class="section-stats">帖子 <%= it.tag.count %> · 浏览 <%= it.tag.views %></p>
+
+<h3>相关帖子</h3>
+<div class="post-text-list">
+    <% if (it.posts && it.posts.length > 0) { %>
+    <% it.posts.forEach(function(post) { %>
+    <div class="post-list-item">
+        <a href="/post/<%= post.id %>"><%= post.title %></a>
+        <small>浏览 <%= post.views %> · <%= post.author_name %></small>
+    </div>
+    <% }) %>
+    <% } else { %>
+    <p>该标签下暂无帖子</p>
+    <% } %>
+</div>
+
+<p><a href="/tags">返回标签列表</a></p>

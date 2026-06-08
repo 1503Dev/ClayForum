@@ -1,0 +1,45 @@
+<% layout("./layout") %>
+
+<h2>用户注册</h2>
+
+<% if (it.error) { %>
+<p class="form-error"><%= it.error %></p>
+<% } %>
+
+<form class="auth-form" method="post" action="/register">
+    <div class="form-row">
+        <label for="username">用户名</label>
+        <input type="text" id="username" name="username" maxlength="<%= it.account.max_username_length %>" minlength="<%= it.account.min_username_length %>" value="<%= it.form.username || '' %>" required autocomplete="username" autocapitalize="off">
+        <small class="form-hint"><%= it.account.username_requirements %>（<%= it.account.min_username_length %>-<%= it.account.max_username_length %> 字符，自动转为小写）</small>
+    </div>
+    <div class="form-row">
+        <label for="display_name">昵称</label>
+        <input type="text" id="display_name" name="display_name" maxlength="<%= it.account.max_display_name_length %>" minlength="<%= it.account.min_display_name_length %>" value="<%= it.form.display_name || '' %>" required autocomplete="nickname">
+        <small class="form-hint">昵称可使用任意字符（<%= it.account.min_display_name_length %>-<%= it.account.max_display_name_length %> 字符）</small>
+    </div>
+    <div class="form-row">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" maxlength="<%= it.account.max_password_length %>" minlength="<%= it.account.min_password_length %>" required autocomplete="new-password">
+        <small class="form-hint"><%= it.account.password_requirements %>（<%= it.account.min_password_length %>-<%= it.account.max_password_length %> 字符）</small>
+    </div>
+    <% if (it.account.register_confirm_password) { %>
+    <div class="form-row">
+        <label for="confirm_password">确认密码</label>
+        <input type="password" id="confirm_password" name="confirm_password" maxlength="<%= it.account.max_password_length %>" required autocomplete="new-password">
+    </div>
+    <% } %>
+    <% if (it.account.register_captcha) { %>
+    <div class="form-row">
+        <label for="captcha">验证码</label>
+        <div class="captcha-row">
+            <input type="text" id="captcha" name="captcha" maxlength="<%= it.account.captcha_max_length %>" required autocomplete="off"<% if (it.account.captcha_type === 'math') { %> inputmode="numeric"<% } %>>
+            <a href="/register" title="刷新验证码" class="captcha-image-wrap"><img src="/captcha" alt="验证码" class="captcha-image"></a>
+        </div>
+        <small class="form-hint"><%= it.account.captcha_requirements %></small>
+    </div>
+    <% } %>
+    <div class="form-actions">
+        <button type="submit">注册</button>
+        <a href="/login">登录</a>
+    </div>
+</form>

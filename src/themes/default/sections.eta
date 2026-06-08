@@ -1,0 +1,31 @@
+<% layout("./layout") %>
+
+<h2>论坛板块</h2>
+<table class="forum-table">
+    <thead>
+    <tr>
+        <th>板块名称</th>
+        <th>简介</th>
+        <th>主题数</th>
+        <th>总贴数</th>
+        <th>浏览量</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (it.sections && it.sections.length > 0) { %>
+    <% it.sections.forEach(function(section) { %>
+    <tr>
+        <td><a href="/section/<%= section.id %>" style="color: #0000ee; font-weight: bold;"><%= section.name %></a></td>
+        <td><%= section.description %></td>
+        <td><%= section.topics_count %></td>
+        <td><%= section.posts_count %></td>
+        <td><%= section.views %></td>
+    </tr>
+    <% }) %>
+    <% } else { %>
+    <tr>
+        <td colspan="5" style="text-align: center;">暂无板块</td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>

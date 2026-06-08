@@ -1,0 +1,23 @@
+<% layout("./layout") %>
+
+<article class="post-detail">
+    <h2><%= it.post.title %></h2>
+    <div class="post-meta">
+        <span>作者：<%= it.post.author_name %></span>
+        <span>板块：<a href="/section/<%= it.post.section_id %>"><%= it.section_name %></a></span>
+        <span>浏览：<%= it.post.views %></span>
+        <span>时间：<%= new Date(it.post.created_at).toLocaleString('zh-CN') %></span>
+    </div>
+    <% if (it.post.tags && it.post.tags.length > 0) { %>
+    <div class="post-tags">
+        <% it.post.tags.forEach(function(tag) { %>
+        <a href="/tag/<%= encodeURIComponent(tag) %>" class="tag-item"># <%= tag %></a>
+        <% }) %>
+    </div>
+    <% } %>
+    <div class="markdown-body">
+        <%~ it.post.content_html %>
+    </div>
+</article>
+
+<p><a href="/">返回首页</a></p>

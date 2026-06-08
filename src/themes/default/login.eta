@@ -1,0 +1,34 @@
+<% layout("./layout") %>
+
+<h2>用户登录</h2>
+
+<% if (it.error) { %>
+<p class="form-error"><%= it.error %></p>
+<% } %>
+
+<form class="auth-form" method="post" action="/login">
+    <div class="form-row">
+        <label for="username">用户名</label>
+        <input type="text" id="username" name="username" maxlength="<%= it.account.max_username_length %>" value="<%= it.form.username || '' %>" required autocomplete="username" autocapitalize="off">
+        <small class="form-hint"><%= it.account.username_requirements %></small>
+    </div>
+    <div class="form-row">
+        <label for="password">密码</label>
+        <input type="password" id="password" name="password" maxlength="<%= it.account.max_password_length %>" required autocomplete="current-password">
+        <small class="form-hint"><%= it.account.password_requirements %></small>
+    </div>
+    <% if (it.account.login_captcha) { %>
+    <div class="form-row">
+        <label for="captcha">验证码</label>
+        <div class="captcha-row">
+            <input type="text" id="captcha" name="captcha" maxlength="<%= it.account.captcha_max_length %>" required autocomplete="off"<% if (it.account.captcha_type === 'math') { %> inputmode="numeric"<% } %>>
+            <a href="/login" title="刷新验证码" class="captcha-image-wrap"><img src="/captcha" alt="验证码" class="captcha-image"></a>
+        </div>
+        <small class="form-hint"><%= it.account.captcha_requirements %></small>
+    </div>
+    <% } %>
+    <div class="form-actions">
+        <button type="submit">登录</button>
+        <a href="/register">注册</a>
+    </div>
+</form>

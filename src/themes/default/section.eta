@@ -1,0 +1,21 @@
+<% layout("./layout") %>
+
+<h2><%= it.section.name %></h2>
+<p class="section-desc"><%= it.section.description %></p>
+<p class="section-stats">主题 <%= it.section.topics_count %> · 帖子 <%= it.section.posts_count %> · 浏览 <%= it.section.views %></p>
+
+<h3>帖子列表</h3>
+<div class="post-text-list">
+    <% if (it.posts && it.posts.length > 0) { %>
+    <% it.posts.forEach(function(post) { %>
+    <div class="post-list-item">
+        <a href="/post/<%= post.id %>"><%= post.title %></a>
+        <small>浏览 <%= post.views %> · <%= post.author_name %></small>
+    </div>
+    <% }) %>
+    <% } else { %>
+    <p>该板块暂无帖子</p>
+    <% } %>
+</div>
+
+<p><a href="/sections">返回板块列表</a></p>
